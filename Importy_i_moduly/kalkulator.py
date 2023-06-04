@@ -10,21 +10,17 @@ while True:
     wybor = int(input("Którą operację chcesz wykonać?: "))
 
     if wybor == 1:
-        a = int(input("wpisz pierwszą liczbę: "))
-        b = int(input("wpisz drugą liczbę: "))
-        mod1.dodawanie(a, b)
+        mod1.dodawanie()
     elif wybor == 2:
-        a = int(input("wpisz pierwszą liczbę: "))
-        b = int(input("wpisz drugą liczbę: "))
-        mod1.odejmowanie(a, b)
+        mod1.odejmowanie()
     elif wybor == 3:
-        a = int(input("wpisz pierwszą liczbę: "))
-        b = int(input("wpisz drugą liczbę: "))
-        mod1.mnozenie(a, b)
+        mod1.mnozenie()
     elif wybor == 4:
-        a = int(input("wpisz pierwszą liczbę: "))
-        b = int(input("wpisz drugą liczbę: "))
-        mod1.dzielenie(a, b)
+        try:
+            mod1.dzielenie()
+        except ZeroDivisionError:
+            print("Nie możesz dzielić przez 0...")
+            continue
     elif wybor == 0:
         print("Dziękuję za korzystanie z naszych usług!!")
         break

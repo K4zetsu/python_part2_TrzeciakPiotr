@@ -2,38 +2,35 @@
 import klasy
 import json
 from datetime import date, datetime
-#poniżej zaimplementowana biblioteka której chciałem użyć aby zaprojektować GUI, z braku czasu nie udało się to.
-from PySide6.QtWidgets import QApplication, QWidget
-#Od razu chciałem zgłosić sprawdzającemu co następuje. Kod był pisany w 100% przeze mnie i ja wiem, że nie jest on idealny.
-#Mimo to przesiedziałem nad nim naprawdę sporo czasu. To był najtrudniejszy kod jaki pisałem do tej pory.
-#Wiem też, że pewnie wiele rzeczy dało się uprościć, połowę z tych rzeczy pewnie powrzucać w klasy i metody żeby wyglądało.
-#Po części z braku wiedzy i po części z braku czasu wygląda to jak wygląda, JEDNAKŻE!
-#Jestem dumny, że udało mi się skleić coś takiego samodzielnie często metodą prób i błędów, sporo nauczyłem robiąc to zadanie.
-#Dlatego drogi sprawdzający, wiem, że składnia, wykorzystane metody wyglądają jakby był pisane przez 5cio latka, ale dopiero się rozkręcam.
-#To byłem ja, Piotr Trzeciak.
+
 print("Witaj w twojej osobistej liście zadań!\n")
 #próba otwarcia pliku lista_zadan.json , wyświetlenia jego zawartości i zapisania jej do tablicy zadania[]
 # jeśli plik nie ma zawartości, wyświetlany jest stosowny komunikat i tworzona jest pusta lista zadania[]
+ID_zadania = []
 try:
     with open("to_do_lista/lista_zadan.json", 'r', encoding='utf-8') as plik:
         zadania = json.load(plik)
-        for i in range(0, len(zadania), +1):
-            print("Zadanie numer {}".format(i+1))
-            print("Nazwa:", zadania[i]["Tytuł"])
-            print("Termin:", zadania[i]["Termin"])
+        for zadanie in zadania:
+            ID_zadania.append(zadanie["ID"])
+            print("Zadanie numer {}".format(zadanie['ID']))
+            print("Nazwa:", zadanie["Tytuł"])
+            print("Termin:", zadanie["Termin"])
             print("\n")
 except json.JSONDecodeError:
     print("Nie masz jeszcze żadnych zadań na swojej liście :)")
     zadania = []
+except FileNotFoundError:
+    with open("to_do_lista/lista_zadan.json", "w+", encoding="utf-8") as plik:
+        print("Nie masz jeszcze odpowiedniego pliku, został on stworzony.")
+        zadania = []
 #Tworzenie zmiennych potrzebnych do funkcjonowania tego kodu. loop odpowiada za pętlę programu,
 #listaZadan zczytuje nowo utworzone zadania gotowe do zapisania w pliku, ID jest tworzone teraz gdyż jest to konieczne w tym programie
 #aby było one unikatowe dla każdego zadania, zmienna oraz uniqueID służą do elementu kodu sprawdzającego unikatowe ID
 loop = True
 listaZadan = []
 warunek = len(zadania)
-ID = 0
 zmienna = 1
-uniqueID = 2
+uniqueID = 0
 dni_tygodnia = ['poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek', 'sobota', 'niedziela']
 #Rozpoczęcie właściwego programu
 while loop:
@@ -54,17 +51,11 @@ while loop:
 #Mamy tu do czynienia z warunkiem sprawdzającym i przypisującym unikalne ID oraz prostym przypisaniem wartości do zmiennych znajdujących
 #się w osobnej klasie
     if wybor == 1:
-        if len(zadania) == 0:
-            ID = ID + 1
-        elif len(listaZadan) > 1:
-            ID = len(zadania) + uniqueID
-            uniqueID = uniqueID + 1
-        elif warunek != len(zadania):
-            ID = len(zadania) + 1
+        if len(ID_zadania) == 0:
+            uniqueID = 1
         else:
-            ID = len(zadania) + zmienna
-            zmienna = zmienna + 1
-
+            uniqueID = max(ID_zadania) + 1
+        ID_zadania.append(uniqueID)
         nazwa = input("Nazwa zadania: ")
         opis = input("Dodaj opis zadania: ")
 #Kwestia terminu, uznałem, że najlepiej będzie jeśli program sam określi jakim dniem tygodnia jest wpisana data
@@ -76,16 +67,21 @@ while loop:
         termin_data = datetime.strptime(termin, "%d-%m-%Y")
         dzien_tygodnia = termin_data.weekday()
         nazwa_dnia = dni_tygodnia[dzien_tygodnia]
-        noweZadanie = klasy.Lista(ID, nazwa, termin, opis, nazwa_dnia)
+        noweZadanie = klasy.Lista(uniqueID, nazwa, termin, opis, nazwa_dnia)
         element = noweZadanie.dodajZadanie()
-        element[0] = int(element[0])
+        element["ID"] = int(element["ID"])
         listaZadan.append(element)
+        print("Zadanie numer {}".format(element['ID']))
+        print("Nazwa:", element["Tytuł"])
+        print("Termin:", element["Termin"])
+        print("\n")
 #Po wyborze opcji "2" użytkownik będzie mógł wyświetlić wybrane przez niego zadanie oraz zostanie zapytany czy chce wyświetlić opis
     elif wybor == 2:
         numerZadania = int(input("Wybierz numer zadania, które chcesz wyswietlić: "))
-        for zadanie in zadania:
+        listaZadan.extend(zadania)
+        for zadanie in listaZadan:
             if numerZadania == zadanie["ID"]:
-                print("ID zadania: ", zadanie["ID"])
+                print("Numer zadania: ", zadanie["ID"])
                 print("Nazwa zadania: ", zadanie["Tytuł"])
                 print("Termin zadania: ", zadanie["Termin"])
                 print("Dzień tygodnia: ", zadanie["Dzien"])
@@ -99,7 +95,8 @@ while loop:
         usuwanie_zadania = klasy.Lista(1, "", "", "", "")
         numer_zadania = int(input("Wybierz numer zadania, które chcesz usunąć: "))
         usuwanie_zadania.usunZadanie(numer_zadania)
-        zadania.pop(numer_zadania - 1)
+        listaZadan = [element for element in listaZadan if element["ID"] != numer_zadania]
+        zadania = [element for element in zadania if element['ID'] != numer_zadania]
 #Opcja "4" umożliwia aktualizację dowolnego zadania z zachowaniem jego ID, nie ma potrzeby go zmieniać.
     elif wybor == 4:
         numerZadania = int(input("Wybierz numer zadania, które chcesz zaktualizować: "))
@@ -121,9 +118,8 @@ while loop:
     elif wybor == 5:
         istniejace_id = [zadanie['ID'] for zadanie in zadania]
         for zadanie in listaZadan:
-            if zadanie[0] not in istniejace_id:
-                formatowane = {"ID": zadanie[0], "Tytuł": zadanie[1], "Termin": zadanie[2], "Opis": zadanie[3], "Dzien": zadanie[4]}
-                zadania.append(formatowane)
+            if zadanie["ID"] not in istniejace_id:
+                zadania.append(zadanie)
         with open("to_do_lista/lista_zadan.json", "w", encoding='utf-8') as plik:
             json.dump(zadania, plik, ensure_ascii=False, indent=4)
             print("Zadania zostały zapisane!\n")
@@ -152,11 +148,10 @@ while loop:
         with open("to_do_lista/lista_zadan.json", "w", encoding='utf-8') as plik:
             istniejace_id = [zadanie['ID'] for zadanie in zadania]
             for zadanie in listaZadan:
-                if zadanie[0] in istniejace_id:
+                if zadanie["ID"] in istniejace_id:
                     continue
                 else:
-                    formatowane = {"ID":zadanie[0], "Tytuł":zadanie[1], "Termin":zadanie[2], "Opis":zadanie[3], "Dzien": zadanie[4]}
-                    zadania.append(formatowane)
+                    zadania.append(zadanie)
             if len(zadania) == 0:
                 print("Nie masz żadnych danych do zapisania!\n")
             else:

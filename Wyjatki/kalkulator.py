@@ -1,31 +1,48 @@
 import mod1
+        
 
-class WrongNumberException(Exception):
-    def __init__(self):
-        super().__init__("Wybrałeś zły numer, nie jest on przypisany do żadnego działania")
 while True:
     print("1. dodawanie")
     print("2. odejmowanie")
     print("3. mnożenie")
     print("4. dzielenie")
     print("0. koniec")
-
-    wybor = int(input("Którą operację chcesz wykonać?: "))
+    try:
+        wybor = int(input("Którą operację chcesz wykonać?: "))
+    except ValueError:
+        print("Zły format danych, spróbuj ponownie.")
+        continue
     if wybor == 1:
-        a = int(input("wpisz pierwszą liczbę: "))
-        b = int(input("wpisz drugą liczbę: "))
+        try:
+            a = int(input("wpisz pierwszą liczbę: "))
+            b = int(input("wpisz drugą liczbę: "))
+        except ValueError:
+            print("Zły format danych, spróbuj ponownie.")
+            continue
         mod1.dodawanie(a, b)
     elif wybor == 2:
-        a = int(input("wpisz pierwszą liczbę: "))
-        b = int(input("wpisz drugą liczbę: "))
+        try:
+            a = int(input("wpisz pierwszą liczbę: "))
+            b = int(input("wpisz drugą liczbę: "))
+        except ValueError:
+            print("Zły format danych, spróbuj ponownie.")
+            continue
         mod1.odejmowanie(a, b)
     elif wybor == 3:
-        a = int(input("wpisz pierwszą liczbę: "))
-        b = int(input("wpisz drugą liczbę: "))
+        try:
+            a = int(input("wpisz pierwszą liczbę: "))
+            b = int(input("wpisz drugą liczbę: "))
+        except ValueError:
+            print("Zły format danych, spróbuj ponownie.")
+            continue
         mod1.mnozenie(a, b)
     elif wybor == 4:
-        a = int(input("wpisz pierwszą liczbę: "))
-        b = int(input("wpisz drugą liczbę: "))
+        try:
+            a = int(input("wpisz pierwszą liczbę: "))
+            b = int(input("wpisz drugą liczbę: "))
+        except ValueError:
+            print("Zły format danych, spróbuj ponownie.")
+            continue
         try:
             mod1.dzielenie(a, b)
         except ZeroDivisionError:
@@ -34,4 +51,5 @@ while True:
         print("Dziękuję za korzystanie z naszych usług!!")
         break
     elif wybor > 4 or wybor < 0:
-        raise WrongNumberException
+        print("Wybrałeś nieistniejącą opcję, spróbuj ponownie.")
+        continue

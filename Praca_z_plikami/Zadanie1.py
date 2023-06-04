@@ -12,11 +12,8 @@ with open(data_path, 'r', encoding='utf-8') as plik:
     y = linie[2].split()
     z = linie[4].split()
     lista_slow = x + y + z
-    for i in range(0, len(lista_slow)-1, +1):
-        lista_slow[i].split()
-        if lista_slow[i].endswith(",") or lista_slow[i].endswith("."):
-            lista_slow[i].split()
-            lista_slow[i] = ''.join(lista_slow[i][:-1])
+    for i in range(len(lista_slow)):
+        lista_slow[i] = lista_slow[i].strip(",.;")
     print(lista_slow)
     print(f"Liczba słów w tym tekście: {len(lista_slow)} !!")
     for i in alfabet:

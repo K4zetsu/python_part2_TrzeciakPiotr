@@ -28,7 +28,7 @@ with open(data_path, 'r', encoding='utf-8') as plik:
 
 i = 1
 losowe_dane = []
-while i != liczba_kombinacji:
+while i != liczba_kombinacji + 1:
     losowe_imie = random.choice(imiona)
     losowe_nazwisko = random.choice(nazwiska)
     kombinacja = losowe_imie + " " + losowe_nazwisko

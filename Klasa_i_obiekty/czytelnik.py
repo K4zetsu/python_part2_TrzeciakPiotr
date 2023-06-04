@@ -1,6 +1,6 @@
 
 class Czytelnik:
-    """Self to taki odnośnik pozwalający odnosić się do oiektów wewnątrz klasy, nie no nie wiem co to jest ale ponoć ważne więc dodawaj zawsze do siebie do projektu"""
+    #Self to taki odnośnik pozwalający odnosić się do oiektów wewnątrz klasy, nie no nie wiem co to jest ale ponoć ważne więc dodawaj zawsze do siebie do projektu
     def __init__(self, czytelnik_imie: str,czytelnik_nazwisko: str, czytelnik_wiek: int, numer_karty: int, adres_zamieszkania: str):
         self.czytelnik = self.stworz_czytelnika(czytelnik_imie, czytelnik_nazwisko)
         self.wiek = czytelnik_wiek

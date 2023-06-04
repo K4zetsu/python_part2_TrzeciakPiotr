@@ -1,18 +1,24 @@
-def dodawanie(a, b):
+
+def dodawanie():
+    a = int(input("Podaj pierwszą liczbę: "))
+    b = int(input("Podaj drugą liczbę: "))
     wynik = a + b
     print(a, "+", b, "=", wynik)
 
-def odejmowanie(a, b):
+def odejmowanie():
+    a = int(input("Podaj pierwszą liczbę: "))
+    b = int(input("Podaj drugą liczbę: "))
     wynik = a - b
     print(a, "-", b, "=", wynik)
 
-def mnozenie(a, b):
+def mnozenie():
+    a = int(input("Podaj pierwszą liczbę: "))
+    b = int(input("Podaj drugą liczbę: "))
     wynik = a * b
     print(a, "*", b, "=", wynik)
 
-def dzielenie(a, b):
-    if b == 0:
-        print("NIE MOŻESZ DZIELIĆ PRZEZ 0 POTWORZE!!")
-        exit
+def dzielenie():
+    a = int(input("Podaj pierwszą liczbę: "))
+    b = int(input("Podaj drugą liczbę: "))
     wynik = a / b
     print(a, ":", b, "=", wynik)
